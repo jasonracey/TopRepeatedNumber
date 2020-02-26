@@ -21,9 +21,12 @@ namespace TopRepeatedNumber
                 if (counts[num] > maxCount) maxCount = counts[num];
             }
 
-            var numbersWithMaxCount = counts
-                .Where(c => c.Value == maxCount)
-                .Select(c => c.Key);
+            var numbersWithMaxCount = new List<int>();
+
+            foreach (var kvp in counts)
+            {
+                if (kvp.Value == maxCount) numbersWithMaxCount.Add(kvp.Key);
+            }
 
             return (numbersWithMaxCount, maxCount);
         }
