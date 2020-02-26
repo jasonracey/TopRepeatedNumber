@@ -9,13 +9,13 @@ namespace TopRepeatedNumber.UnitTests
     public class FindInTests
     {
         [TestMethod]
-        public void WhenNumbersIsNull_ThrowsArgumntNullException()
+        public void WhenNumbersIsNull_ThrowsArgumentNullException()
         {
             Assert.ThrowsException<ArgumentNullException>(() => TopRepeatedNumber.FindIn(null));
         }
 
         [TestMethod]
-        public void WhenNumbersIsEmpty_ThrowsArgumntNullException()
+        public void WhenNumbersIsEmpty_ThrowsArgumentNullException()
         {
             Assert.ThrowsException<ArgumentException>(() => TopRepeatedNumber.FindIn(Enumerable.Empty<int>()));
         }
@@ -28,8 +28,20 @@ namespace TopRepeatedNumber.UnitTests
             var result = TopRepeatedNumber.FindIn(numbers);
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(2, result.Number);
-            Assert.AreEqual(1, result.Count);
+            CollectionAssert.AreEqual(new List<int> { 2 }, result.NumbersWithMaxCount.ToList());
+            Assert.AreEqual(1, result.MaxCount);
+        }
+
+        [TestMethod]
+        public void WhenNumbersContainsMoreThanItem_AndNoItemsAreTop_ReturnsAllItems_AndCount()
+        {
+            var numbers = new List<int> { 1, 2, 3 };
+
+            var result = TopRepeatedNumber.FindIn(numbers);
+
+            Assert.IsNotNull(result);
+            CollectionAssert.AreEqual(new List<int> { 1, 2, 3 }, result.NumbersWithMaxCount.ToList());
+            Assert.AreEqual(1, result.MaxCount);
         }
 
         [TestMethod]
@@ -40,32 +52,20 @@ namespace TopRepeatedNumber.UnitTests
             var result = TopRepeatedNumber.FindIn(numbers);
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(3, result.Number);
-            Assert.AreEqual(2, result.Count);
+            CollectionAssert.AreEqual(new List<int> { 3 }, result.NumbersWithMaxCount.ToList());
+            Assert.AreEqual(2, result.MaxCount);
         }
 
         [TestMethod]
-        public void WhenNumbersContainsMoreThanItem_AndMoreThanOneItemIsTop_ReturnsFirstItem_AndCount()
+        public void WhenNumbersContainsMoreThanItem_AndMoreThanOneItemIsTop_ReturnsAllItems_AndCount()
         {
-            var numbers = new List<int> { 5, 7, 5, 4, 7, 7, 5 };
+            var numbers = new List<int> { 7, 5, 7, 4, 5, 5, 7 };
 
             var result = TopRepeatedNumber.FindIn(numbers);
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(5, result.Number);
-            Assert.AreEqual(3, result.Count);
-        }
-
-        [TestMethod]
-        public void WhenNumbersContainsMoreThanItem_AndNoItemsAreTop_ReturnsFirstItem_AndCount()
-        {
-            var numbers = new List<int> { 8, 7, 8, 4, 7 };
-
-            var result = TopRepeatedNumber.FindIn(numbers);
-
-            Assert.IsNotNull(result);
-            Assert.AreEqual(8, result.Number);
-            Assert.AreEqual(2, result.Count);
+            CollectionAssert.AreEqual(new List<int> { 7, 5 }, result.NumbersWithMaxCount.ToList());
+            Assert.AreEqual(3, result.MaxCount);
         }
     }
 }
